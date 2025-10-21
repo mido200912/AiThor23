@@ -14,10 +14,8 @@ dotenv.config();
 const app = express();
 
 // CORS: فقط للفرونت اند
-app.use(cors({
-  origin: "https://aithor2.vercel.app", // ضع هنا URL الفرونت اند أو قائمة إذا كان متعدد
-  credentials: true
-}));
+app.use(cors());
+
 
 app.use(express.json());
 
