@@ -15,7 +15,7 @@ const app = express();
 
 // CORS: فقط للفرونت اند
 app.use(cors({
-  origin: "http://localhost:3000", // ضع هنا URL الفرونت اند أو قائمة إذا كان متعدد
+  origin: "https://aithor2.vercel.app", // ضع هنا URL الفرونت اند أو قائمة إذا كان متعدد
   credentials: true
 }));
 
