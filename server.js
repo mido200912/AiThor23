@@ -5,14 +5,20 @@ import mongoose from "mongoose";
 import chatRoutes from "./routes/chatRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
-import companyRoutes from "./routes/Company.js"; // ✅ اسم الملف الصحيح
+import companyRoutes from "./routes/Company.js";
 import publicCompanyChat from "./routes/publicCompanyChat.js";
+import publicCompanyChatRoutes from "./routes/publicCompanyChat.js";
 
 
 dotenv.config();
 const app = express();
 
-app.use(cors());
+// CORS: فقط للفرونت اند
+app.use(cors({
+  origin: "http://localhost:3000", // ضع هنا URL الفرونت اند أو قائمة إذا كان متعدد
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Routes
@@ -20,16 +26,26 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/company", companyRoutes);
-app.use("/api/public", publicCompanyChat);
+
+app.use("/api/public", publicCompanyChatRoutes);
+// Default route
+app.get("/", (req, res) => {
+  res.send("AiThor API is running");
+});
+
+// Error handler middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ success: false, error: err.message });
+});
+
+// MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
-app.get("/", (req, res) => {
-  res.send("Aithor API is running");
-});
-
-app.listen(process.env.PORT || 5000, () => {
-  console.log("Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
